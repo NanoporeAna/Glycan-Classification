@@ -1,8 +1,8 @@
 # Glycan-Classification
-1.Glycan-Classification description                               
+**1.Glycan-Classification description**                               
                                                                                 
  Glycan-Classification serves as a machine learning-based nanopore analysis platform 
- for the identification of different **RNA types**.                 
+ for the identification of different glycan types.                 
  The code contains three functions as follows:                                
                                                                                
  1).The raw data is analyzed for KL divergence.   	            
@@ -12,7 +12,7 @@
  3).Model training and testing by the dataset(at './data/').                                        
 
 
- 2.Operating procedures                             
+ **2.Operating procedures**                             
     First, you need to ensure that './data/' has the target file(xx.xlsx) you need, then execute _'featuresample.py'_ to extract 
  the corresponding molecular features, and then select the corresponding machine learning model training in the model file to 
  obtain the model and results.
@@ -30,7 +30,7 @@
 	Make sure that the feature file is obtained from your previous data preprocessing, directly execute and select the ML model you need
 
 
-3.Folder describing
+**3.Folder describing**
 
 1).Folder "data"
 
@@ -49,7 +49,7 @@ This folder is mainly used to store model files for loading exiting models
 4).picture
 Store some result pictures.
 
-4). soft dependencies 
+**4. soft dependencies** 
 For the original code, the software uses the following main dependencies:
 numpy
 pandas
