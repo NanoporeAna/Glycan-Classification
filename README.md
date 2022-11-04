@@ -17,8 +17,12 @@
 First, you need to ensure that './data/' has the target file(xx.xlsx) you need, then execute _'featuresample.py'_ to extract 
  the corresponding molecular features, and then select the corresponding machine learning model training in the model file to 
  obtain the model and results.
+1).Raw data analysis
+   To ensure the reasonability of dividing, we used the Kullback-Leibler (KL) divergence to evaluate the similarity between the distribution of each subset events with varied event number and overall events. The more similar the two probability distributions are, the smaller the KL divergence is.
+You can execute the **data_ana.py**, but it takes a long time.
 
-1).Data feature extraction
+
+2).Data feature extraction
     Make sure the following parameters are what you want at **featureSample.py**:
 ```python
 ...
@@ -34,10 +38,10 @@ sample_len = 2000 # subsets, each of which contains 2000 events
 
 ```
 
-2).Model training and testing:
+3).Model training and testing:
     Make sure that the feature file is obtained from your previous data preprocessing, directly execute and select the ML model you need.
 
-This example can be seen in randomForest.py 
+This example can be seen in **randomForest.py** 
 ```bash
 cd model
 python randomForest.py
@@ -50,11 +54,11 @@ python randomForest.py
 
 This Fold includes three subfolders:
 
-- "3S3FL-MPB---6S3FL-MPB---6S2FL-MPB": contain
+- "3S3FL-MPB---6S3FL-MPB---6S2FL-MPB": Three MPB tagged sialylglycans containing branched fucose.
 
-- "3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB":
+- "3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB": Four MPB tagged sialylglycans.
 
-- "Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL": 
+- "Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL": Three composite label tagged neutral disaccharides.
 
 2).Folder "model"
 
