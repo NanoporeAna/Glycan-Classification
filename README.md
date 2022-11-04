@@ -17,7 +17,9 @@
 First, you need to ensure that './data/' has the target file(xx.xlsx) you need, then execute _'featuresample.py'_ to extract 
  the corresponding molecular features, and then select the corresponding machine learning model training in the model file to 
  obtain the model and results.
+
 1).Raw data analysis
+
    To ensure the reasonability of dividing, we used the Kullback-Leibler (KL) divergence to evaluate the similarity between the distribution of each subset events with varied event number and overall events. The more similar the two probability distributions are, the smaller the KL divergence is.
 You can execute the **data_ana.py**, but it takes a long time.
 
