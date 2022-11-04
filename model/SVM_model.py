@@ -65,7 +65,7 @@ if __name__ == '__main__':
             train_acc.append(train_score)
             print("训练集：", train_score)
 
-            joblib.dump(clf, "svm_model%d.m" % i)
+            joblib.dump(clf, "../models/svm_model%d.m" % i)
             time_3 = time.time()
             print('training cost %f seconds' % (time_3 - time_2))
 

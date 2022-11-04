@@ -62,7 +62,7 @@ if __name__ == '__main__':
             train_acc.append(train_score)
             print("训练集：", train_score)
 
-            joblib.dump(clf, "randomForest_model.m")
+            joblib.dump(clf, "../models/randomForest_model.m")
             time_3 = time.time()
             print('training cost %f seconds' % (time_3 - time_2))
 
