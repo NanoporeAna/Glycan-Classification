@@ -1,3 +1,4 @@
+import os
 import time
 import joblib
 import numpy as np
@@ -36,7 +37,7 @@ if __name__ == '__main__':
     time_2 = time.time()
     model_path = None
     # 自己数据集加载
-
+    save_path = '3ML_result.xlsx'
     print('Start training...')
     test_acc = []
     train_acc = []
@@ -118,7 +119,9 @@ if __name__ == '__main__':
             'precision': str(round(ps_mean, 4)) + '±' + str(round(ps_std, 4)),
             'recall': str(round(rs_mean, 4)) + '±' + str(round(rs_std, 4)),
             'F1': str(round(fs_mean, 4)) + '±' + str(round(fs_std, 4))}
-    with pd.ExcelWriter(r'3ML_result.xlsx', mode='a', engine='openpyxl') as writer:
+    if not os.path.exists(save_path):
+        os.system(r"touch {}".format(save_path))  # 调用系统命令行来创建文件
+    with pd.ExcelWriter(save_path, mode='a', engine='openpyxl') as writer:
         df = pd.DataFrame(data, index=[0])
 
         df.to_excel(writer, sheet_name='adaBoost', index=False)
