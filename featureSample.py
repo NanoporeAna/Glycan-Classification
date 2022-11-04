@@ -58,13 +58,13 @@ tmp_y = [m for n in y for m in n]
 
 x_tmp = sorted(tmp_x)
 y_tmp = sorted(tmp_y)
-num = 30  # 等分个数
+num = 3  # 等分个数
 res_x, res_y = split_slice_n(x_tmp, y_tmp, num)
 print(res_x)
 print(res_y)
 
 for j in range(mol_num):
-    sample_len = 2500
+    sample_len = 2000
     start = 0
     temp_len = data[j].shape[0]
     features = []
