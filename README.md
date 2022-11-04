@@ -76,7 +76,7 @@ This folder is mainly used to store model files for loading exiting models
 Store some result pictures.
 
 ---------
-## 4. soft dependencies
+## 4. code dependencies
 
 ```bash
 pip install -r requirements.txt
