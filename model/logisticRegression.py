@@ -1,3 +1,4 @@
+import os
 import time
 import joblib
 import numpy as np
@@ -7,12 +8,13 @@ from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay
 from sklearn import datasets, metrics, linear_model
 from sklearn.model_selection import train_test_split
 
-
-file_name = ['../data/Cel-DPE6SL-28930 events', '../data/Lac-DPE6SL-27696 events',
-             '../data/Mal-DPE6SL-31678 events']
+file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
 mol_num = len(file_name)
 for i in range(mol_num):
-    file_name[i] += 'By30on2500mol7.csv'
+    file_name[i] += 'By30on2500mol3.csv'
+
 def load_logistic_data(file_name):
     features = []
     labels = []
@@ -66,10 +68,11 @@ def calculate_recall(metrix):
 if __name__ == '__main__':
     epoch = 100
     print('prepare datasets...')
-    # Iris数据集
-    # iris=datasets.load_iris()
-    # features=iris.data
-    # labels=iris.target
+    # 自己数据集加载
+    save_path = '3ML_result.xlsx'
+    if not os.path.exists(save_path):
+        df = pd.DataFrame()  # 表示创建空的表
+        df.to_excel(save_path)
     time_2 = time.time()
     model_path = None
     test_acc = []

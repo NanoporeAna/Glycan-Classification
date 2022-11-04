@@ -1,3 +1,4 @@
+import os
 import time
 import joblib
 import numpy as np
@@ -8,12 +9,13 @@ from sklearn import datasets, metrics
 from sklearn import svm
 from sklearn.model_selection import train_test_split
 
-file_name = [
-             '../data/Cel-DPE6SL-28930 events', '../data/Lac-DPE6SL-27696 events',
-             '../data/Mal-DPE6SL-31678 events']
+file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
 mol_num = len(file_name)
 for i in range(mol_num):
-    file_name[i] += 'By30on2500mol7.csv'
+    file_name[i] += 'By30on2500mol3.csv'
+
 def load_svm_data(file_name):
     features = []
     labels = []
@@ -32,10 +34,11 @@ def load_svm_data(file_name):
 if __name__ == '__main__':
     epoch = 100
     print('prepare datasets...')
-    # Iris数据集
-    # iris=datasets.load_iris()
-    # features=iris.data
-    # labels=iris.target
+    # 自己数据集加载
+    save_path = '3ML_result.xlsx'
+    if not os.path.exists(save_path):
+        df = pd.DataFrame()  # 表示创建空的表
+        df.to_excel(save_path)
     time_2 = time.time()
     model_path = None
     test_acc = []
@@ -138,12 +141,13 @@ if __name__ == '__main__':
             'precision': str(round(ps_mean, 4)) + '±' + str(round(ps_std, 4)),
             'recall': str(round(rs_mean, 4)) + '±' + str(round(rs_std, 4)),
             'F1': str(round(fs_mean, 4)) + '±' + str(round(fs_std, 4))}
-    with pd.ExcelWriter(r'3ML_result.xlsx', mode='a', engine='openpyxl') as writer:
+    with pd.ExcelWriter(save_path, mode='a', engine='openpyxl') as writer:
         df = pd.DataFrame(data, index=[0])
 
         df.to_excel(writer, sheet_name='SVM', index=False)
         df1 = pd.DataFrame(confusion_matrix)
         df1.to_excel(writer, sheet_name='svm_confusion_matrix', header=False, index=False)
+
     #         # 输出混淆矩阵
     #         confusion_matrix += metrics.confusion_matrix(test_labels, test_predict)
     # print('--混淆矩阵--')

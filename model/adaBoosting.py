@@ -10,11 +10,12 @@ from sklearn.metrics import ConfusionMatrixDisplay
 
 from sklearn.model_selection import train_test_split
 
-file_name = ['../data/Cel-DPE6SL-28930 events', '../data/Lac-DPE6SL-27696 events',
-             '../data/Mal-DPE6SL-31678 events']
+file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
 mol_num = len(file_name)
 for i in range(mol_num):
-    file_name[i] += 'By30on2500mol7.csv'
+    file_name[i] += 'By30on2500mol3.csv'
 
 def load_ada_boosting_data(file_name):
     features = []
@@ -38,6 +39,9 @@ if __name__ == '__main__':
     model_path = None
     # 自己数据集加载
     save_path = '3ML_result.xlsx'
+    if not os.path.exists(save_path):
+        df = pd.DataFrame()  # 表示创建空的表
+        df.to_excel(save_path)
     print('Start training...')
     test_acc = []
     train_acc = []
@@ -119,34 +123,12 @@ if __name__ == '__main__':
             'precision': str(round(ps_mean, 4)) + '±' + str(round(ps_std, 4)),
             'recall': str(round(rs_mean, 4)) + '±' + str(round(rs_std, 4)),
             'F1': str(round(fs_mean, 4)) + '±' + str(round(fs_std, 4))}
-    if not os.path.exists(save_path):
-        os.system(r"touch {}".format(save_path))  # 调用系统命令行来创建文件
+
     with pd.ExcelWriter(save_path, mode='a', engine='openpyxl') as writer:
         df = pd.DataFrame(data, index=[0])
 
         df.to_excel(writer, sheet_name='adaBoost', index=False)
         df1 = pd.DataFrame(confusion_matrix)
         df1.to_excel(writer, sheet_name='adaBoost_confusion_matrix', header=False, index=False)
-        #     # 输出混淆矩阵
-        #     confusion_matrix += metrics.confusion_matrix(test_labels, test_predict)
-        # print('--混淆矩阵--')
-        # print(confusion_matrix)
-        # # 画出混淆矩阵
-        # # ConfusionMatrixDisplay 需要的参数: confusion_matrix(混淆矩阵), display_labels(标签名称列表)
-        # labels = ['Cel', 'Lac', 'Mal']
-        # disp = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix , display_labels=labels)
-        # disp.plot()
-        # plt.title('adaBoosting')
-        # plt.savefig('../picture/3 model adaBoosting best.png')
-        # plt.show()
-        # mean_acc_train = sum(train_acc) / 100
-        # mean_acc_test = sum(test_acc) / 100
-        # print("The mean of train accruacy score is %f" % mean_acc_train)
-        # print("The mean of test accruacy score is %f" % mean_acc_test)
-        # print('*' * 10, 'one hundray time', '*' * 10)
-        # print('精准值：%.5f' % (sum(ps) / 100))
-        # print('召回率：%.5f' % (sum(rs) / 100))
-        # print('F1: %.5f' % (sum(fs) / 100))
-        # print("准确率:%.5f" % (sum(cs) / 100))
-        # # print("roc:%.5f" % (sum(roc) / 100))
+
 

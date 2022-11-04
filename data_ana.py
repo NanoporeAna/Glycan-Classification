@@ -44,8 +44,11 @@ def get_sample(data, res_x, res_y, num):
     return feature
 def get_data():
     pass
-file_name = ['data/3SGP---63554 events', 'data/3SLP---62910 events',
-             'data/LSTaP---64097 events', 'data/STetraP---63445 events']
+file_name = [
+            'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+             'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+             'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events'
+             ]
 mol_num = len(file_name)
 data = [pd.read_excel(i+'.xlsx') for i in file_name]
 x = [i['value1'].values for i in data]
@@ -84,7 +87,7 @@ plt.setp(label_x, rotation=45, horizontalalignment='right')
 plt.savefig('allfig.svg')
 plt.show()
 
-start, end = 900, 1000
+start, end = 900, 15000
 # 计算四个分子的KL散度
 all_kls = []
 for j in range(mol_num):
@@ -109,7 +112,11 @@ for j in range(mol_num):
 
 x = np.arange(start, end)
 x = x.tolist()
-plt.plot(x, all_kls[0])
-plt.title('3SGP split by 3')
+plt.plot(x, all_kls[0], color='orangered',)
+plt.plot(x, all_kls[1], color='blueviolet',)
+plt.plot(x, all_kls[2], color='green', )
+plt.xlabel('number of sample')
+plt.ylabel('KL')
+plt.title('mol split by' + str(num))
 plt.savefig('KL.svg')
 plt.show()

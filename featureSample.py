@@ -42,17 +42,15 @@ def get_sample(data, res_x, res_y, num):
     return feature
 def get_data():
     pass
-file_name = ['data/3SGP---63554 events', 'data/3SLP---62910 events',
-             'data/LSTaP---64097 events', 'data/STetraP---63445 events',
-             'data/Cel-DPE6SL-28930 events', 'data/Lac-DPE6SL-27696 events',
-             'data/Mal-DPE6SL-31678 events']
-
-# file_name = [
-#              'data/Cel-DPE6SL-28930 events', 'data/Lac-DPE6SL-27696 events',
-#              'data/Mal-DPE6SL-31678 events']
+file_name = [
+            'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+             'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+             'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events'
+             ]
 
 mol_num = len(file_name)
 data = [pd.read_excel(i+'.xlsx') for i in file_name]
+t = pd.read_excel('data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events.xlsx')
 x = [i['value1'].values for i in data]
 y = [i['value2'].values for i in data]
 tmp_x = [m for n in x for m in n]
@@ -77,4 +75,4 @@ for j in range(mol_num):
         start = sample_len*(i+1)
         features.append(feature)
     t = pd.DataFrame(features)
-    t.to_csv(file_name[j]+'By'+str(num)+'on'+str(sample_len)+'mol7.csv')
+    t.to_csv(file_name[j]+'By'+str(num)+'on'+str(sample_len)+'mol3.csv')
