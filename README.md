@@ -48,6 +48,7 @@ This example can be seen in **randomForest.py**
 cd model
 python randomForest.py
 ```
+So you can get a **_3ML_result.xlsx_** under the model folder, the **randomForest_model.m** is saved in the models folder
 
 ---------
 ## 3.Folder describing
@@ -70,7 +71,7 @@ This folder is mainly used to store model files for training dataset.
 
 This folder is mainly used to store model files for loading exiting models
 
-4).picture
+4).Folder "picture"
 
 Store some result pictures.
 
