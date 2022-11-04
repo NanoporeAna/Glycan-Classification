@@ -15,7 +15,7 @@ file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 
              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
 mol_num = len(file_name)
 for i in range(mol_num):
-    file_name[i] += 'By30on2500mol3.csv'
+    file_name[i] += 'By3on2000mol3.csv'
 
 def load_ada_boosting_data(file_name):
     features = []

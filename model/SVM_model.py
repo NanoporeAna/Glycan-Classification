@@ -14,7 +14,7 @@ file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 
              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
 mol_num = len(file_name)
 for i in range(mol_num):
-    file_name[i] += 'By30on2500mol3.csv'
+    file_name[i] += 'By3on2000mol3.csv'
 
 def load_svm_data(file_name):
     features = []
@@ -59,7 +59,7 @@ if __name__ == '__main__':
             C值小，对误分类的惩罚减小，允许容错，将他们当成噪声点，泛化能力较强。
             kernel ：核函数，默认是rbf，可以是‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’
             """
-            clf = svm.SVC(C=1.0, kernel='linear')  # poly效果最好
+            clf = svm.SVC(C=1.0, kernel='RBF')  # poly效果最好
             clf.fit(train_features, train_labels)  # training the svc model
             train_score = clf.score(train_features, train_labels)
             train_acc.append(train_score)

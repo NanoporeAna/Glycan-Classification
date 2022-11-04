@@ -13,7 +13,7 @@ file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 
              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
 mol_num = len(file_name)
 for i in range(mol_num):
-    file_name[i] += 'By30on2500mol3.csv'
+    file_name[i] += 'By3on2000mol3.csv'
 
 def load_logistic_data(file_name):
     features = []
@@ -88,9 +88,7 @@ if __name__ == '__main__':
             train_features, test_features, train_labels, test_labels = load_logistic_data(file_name)
             print('Start training...')
             """
-            C：SVC的惩罚参数，默认值是1.0；C越大，对误分类的惩罚增大，趋向于对训练集完全分对的情况，这样对训练集测试时准确率很高，但泛化能力弱。
-            C值小，对误分类的惩罚减小，允许容错，将他们当成噪声点，泛化能力较强。
-            kernel ：核函数，默认是rbf，可以是‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’
+            
             """
             clf = linear_model.LogisticRegression()
             clf.fit(train_features, train_labels)  # training the logistic model

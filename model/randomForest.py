@@ -14,7 +14,7 @@ file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 
              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
 mol_num = len(file_name)
 for i in range(mol_num):
-    file_name[i] += 'By30on2500mol3.csv'
+    file_name[i] += 'By3on2000mol3.csv'
 
 def load_random_forest_data(file_name):
 
@@ -55,8 +55,8 @@ if __name__ == '__main__':
             print('Start training...')
 
             # n_estimators表示要组合的弱分类器个数；
-            # algorithm可选{‘SAMME’, ‘SAMME.R’}，默认为‘SAMME.R’，表示使用的是real boosting算法，‘SAMME’表示使用的是discrete boosting算法
-            clf = RandomForestClassifier(n_estimators=80) # 25
+
+            clf = RandomForestClassifier(n_estimators=25)  # 80
             clf.fit(train_features, train_labels)  # training the svc model
             train_score = clf.score(train_features, train_labels)
             train_acc.append(train_score)
