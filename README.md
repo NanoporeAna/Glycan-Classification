@@ -40,6 +40,12 @@ sample_len = 2000 # subsets, each of which contains 2000 events
 
 ```
 
+```bash
+
+python featureSample.py
+```
+So you can get feature from file_name.
+
 3).Model training and testing:
     Make sure that the feature file is obtained from your previous data preprocessing, directly execute and select the ML model you need.
 
