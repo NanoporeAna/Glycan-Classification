@@ -54,7 +54,7 @@ This example can be seen in **randomForest.py**
 cd train
 python randomForest.py
 ```
-So you can get a **_3ML_result.xlsx_** under the model folder, the **randomForest_model.m** is saved in the models folder.When you run the current script repeatedly, you need to save the previous model. Otherwise, it will be overwritten.
+So you can get a **_3ML_result.xlsx_** under the train folder, the **randomForest_model.m** is saved in the models folder.When you run the current script repeatedly, you need to save the previous model. Otherwise, it will be overwritten.
 
 ---------
 ## 3.Folder describing
