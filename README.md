@@ -45,10 +45,10 @@ sample_len = 2000 # subsets, each of which contains 2000 events
 
 This example can be seen in **randomForest.py** 
 ```bash
-cd model
+cd train
 python randomForest.py
 ```
-So you can get a **_3ML_result.xlsx_** under the model folder, the **randomForest_model.m** is saved in the models folder
+So you can get a **_3ML_result.xlsx_** under the model folder, the **randomForest_model.m** is saved in the models folder.When you run the current script repeatedly, you need to save the previous model. Otherwise, it will be overwritten.
 
 ---------
 ## 3.Folder describing
@@ -63,13 +63,13 @@ This Fold includes three subfolders:
 
 - "Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL": Three composite label tagged neutral disaccharides.
 
-2).Folder "model"
+2).Folder "train"
 
-This folder is mainly used to store model files for training dataset.
+This folder contains five machine learning models for training and testing.
 
 3).Folder "models"
 
-This folder is mainly used to store model files for loading exiting models
+This folder is used to store model files for loading exiting models
 
 4).Folder "picture"
 
