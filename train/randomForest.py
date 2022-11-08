@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
             # n_estimators表示要组合的弱分类器个数；
 
-            clf = RandomForestClassifier(n_estimators=25)  # 80
+            clf = RandomForestClassifier(n_estimators=80)  # 容易区分则设置为25
             clf.fit(train_features, train_labels)  # training the svc train
             train_score = clf.score(train_features, train_labels)
             train_acc.append(train_score)
@@ -131,5 +131,6 @@ if __name__ == '__main__':
         df.to_excel(writer, sheet_name='randomForest', index=False)
         df1 = pd.DataFrame(confusion_matrix)
         df1.to_excel(writer, sheet_name='random_confusion_matrix', header=False, index=False)
+
 
 

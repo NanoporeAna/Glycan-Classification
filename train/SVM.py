@@ -59,7 +59,7 @@ if __name__ == '__main__':
             C值小，对误分类的惩罚减小，允许容错，将他们当成噪声点，泛化能力较强。
             kernel ：核函数，默认是rbf，可以是‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’
             """
-            clf = svm.SVC(C=1.0, kernel='RBF')  # poly效果最好
+            clf = svm.SVC(C=1.0, kernel='poly')  # poly效果最好
             clf.fit(train_features, train_labels)  # training the svc train
             train_score = clf.score(train_features, train_labels)
             train_acc.append(train_score)
