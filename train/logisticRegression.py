@@ -78,7 +78,7 @@ if __name__ == '__main__':
     test_acc = []
     train_acc = []
     all_confusion_matrix = []
-    confusion_matrix = np.zeros((3, 3))
+    confusion_matrix = np.zeros((mol_num, mol_num))
     confusion_matrix.tolist()
     all_ps, all_rs, all_fs, all_cs, all_roc = [], [], [], [], []
     for k in range(10):
@@ -87,9 +87,6 @@ if __name__ == '__main__':
             # 自己数据集加载
             train_features, test_features, train_labels, test_labels = load_logistic_data(file_name)
             print('Start training...')
-            """
-            
-            """
             clf = linear_model.LogisticRegression()
             clf.fit(train_features, train_labels)  # training the logistic train
             train_score = clf.score(train_features, train_labels)

@@ -45,7 +45,7 @@ if __name__ == '__main__':
     test_acc = []
     train_acc = []
     all_confusion_matrix = []
-    confusion_matrix = np.zeros((3, 3))
+    confusion_matrix = np.zeros((mol_num, mol_num))
     confusion_matrix.tolist()
     all_ps, all_rs, all_fs, all_cs, all_roc = [], [], [], [], []
     for k in range(10):
