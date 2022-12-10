@@ -9,9 +9,13 @@ from sklearn import datasets, metrics
 from sklearn import svm
 from sklearn.model_selection import train_test_split
 
-file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+# file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+file_name = ['../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/1-3SG-MPB---40000 events',
+                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/2-3SL-MPB---40000 events',
+                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/3-STetra2-MPB---40000 events',
+                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/4-LSTa-MPB---40000 events']
 mol_num = len(file_name)
 for i in range(mol_num):
     file_name[i] += 'By3on2000mol3.csv'
@@ -35,7 +39,7 @@ if __name__ == '__main__':
     epoch = 100
     print('prepare datasets...')
     # 自己数据集加载
-    save_path = '3ML_result.xlsx'
+    save_path = '4ML_result.xlsx'
     if not os.path.exists(save_path):
         df = pd.DataFrame()  # 表示创建空的表
         df.to_excel(save_path)
@@ -82,15 +86,14 @@ if __name__ == '__main__':
 
             # 采用混淆矩阵（metrics）计算各种评价指标
             ps.append(metrics.precision_score(test_labels, test_predict, average='weighted'))
-            rs.append(metrics.recall_score(test_labels, test_predict, labels=[0,1,2], average='weighted'))
+            rs.append(metrics.recall_score(test_labels, test_predict, labels=[0,1,2,3], average='weighted'))
             fs.append(metrics.f1_score(test_labels, test_predict, average='weighted'))
             cs.append(np.mean(test_labels == test_predict))
             # f, t, _ = roc_curve(test_labels, test_predict)
             # roc.append(auc(f, t))
             # 分类报告
             class_report = metrics.classification_report(test_labels, test_predict,
-                                                         target_names=[ "Cel-DPE6SL",
-                                                                       "Lac-DPE6SL", "Mal-DPE6SL"])
+                                                         target_names=["3SG", "3SL", "STetra2", "LSTa"])
             print(class_report)
             """
             test_labels 为样本真实标签，test_predict 为样本预测标签；

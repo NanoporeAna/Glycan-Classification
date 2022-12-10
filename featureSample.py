@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+import seaborn as sns
+from matplotlib import pyplot as plt
+
 
 def split_slice_n(x, y, n):
     length = len(x)
@@ -55,7 +58,7 @@ def get_feature(file_name, sample_len, num):
     """
     mol_num = len(file_name)
     data = [pd.read_excel(i+'.xlsx') for i in file_name]
-    t = pd.read_excel('data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events.xlsx')
+    # t = pd.read_excel('data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events.xlsx')
     x = [i['value1'].values for i in data]
     y = [i['value2'].values for i in data]
     tmp_x = [m for n in x for m in n]
@@ -65,8 +68,39 @@ def get_feature(file_name, sample_len, num):
     y_tmp = sorted(tmp_y)
 
     res_x, res_y = split_slice_n(x_tmp, y_tmp, num)
+    df = {'Ib/IO': res_x, 'Dwell time': res_y}
+    df = pd.DataFrame(df)
+    df.to_csv('split_slice.csv')
     # print(res_x)
     # print(res_y)
+
+    feature_sa = []
+    # 获取单个分子全局分布的样本特征
+    for i in range(mol_num):
+        data_value = data[i][:].values
+        sample_len = data[i].shape[0]
+        feature = get_sample(data_value, res_x, res_y, num)
+        feature /= sample_len
+        feature_sa.append(feature)
+    print(feature_sa)
+    t = pd.DataFrame(feature_sa)
+    sns.set()
+    plt.rcParams['font.sans-serif'] = 'SimHei'  # 设置中文显示，必须放在sns.set之后
+    f, ax = plt.subplots(figsize=(9, 6))
+    sns.heatmap(t.values, ax=ax, vmin=0, vmax=0.3, cmap='YlOrRd', annot=True, linewidths=1, cbar=True)
+    # ax.set_title('四分子热力图')  # plt.title('热图'),均可设置图片标题
+    ax.set_ylabel('molecule')  # 设置纵轴标签
+    ax.set_xlabel('feature')  # 设置横轴标签
+    # 设置坐标字体方向，通过rotation参数可以调节旋转角度
+    x = [0.5, 1.5, 2.5, 3.5]
+    plt.yticks(x, ['3SG', '3SL', 'LSTa', 'STetra2'])
+    label_y = ax.get_yticklabels()
+    plt.setp(label_y, rotation=360, horizontalalignment='right')
+    label_x = ax.get_xticklabels()
+    plt.setp(label_x, rotation=45, horizontalalignment='right')
+    plt.savefig('feature.svg')
+    plt.show()
+
 
     for j in range(mol_num):
 
@@ -84,11 +118,15 @@ def get_feature(file_name, sample_len, num):
 
 
 if __name__=='__main__':
-    file_name = [
-        'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
-        'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
-        'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events'
-    ]
+    # file_name = [
+    #     'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+    #     'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+    #     'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events'
+    # ]
+    file_name = ['data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/1-3SG-MPB---40000 events',
+                 'data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/2-3SL-MPB---40000 events',
+                 'data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/4-LSTa-MPB---40000 events',
+                 'data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/3-STetra2-MPB---40000 events']
     num = 3  # 等分个数
     sample_len = 2000
 
