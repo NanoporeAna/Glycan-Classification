@@ -70,7 +70,7 @@ def get_feature(file_name, sample_len, num):
     res_x, res_y = split_slice_n(x_tmp, y_tmp, num)
     df = {'Ib/IO': res_x, 'Dwell time': res_y}
     df = pd.DataFrame(df)
-    df.to_csv('split_slice.csv')
+    df.to_csv('split_slice1212.csv')
     # print(res_x)
     # print(res_y)
 
@@ -78,9 +78,9 @@ def get_feature(file_name, sample_len, num):
     # 获取单个分子全局分布的样本特征
     for i in range(mol_num):
         data_value = data[i][:].values
-        sample_len = data[i].shape[0]
+        all_sample_len = data[i].shape[0]
         feature = get_sample(data_value, res_x, res_y, num)
-        feature /= sample_len
+        feature /= all_sample_len
         feature_sa.append(feature)
     print(feature_sa)
     t = pd.DataFrame(feature_sa)
@@ -98,7 +98,7 @@ def get_feature(file_name, sample_len, num):
     plt.setp(label_y, rotation=360, horizontalalignment='right')
     label_x = ax.get_xticklabels()
     plt.setp(label_x, rotation=45, horizontalalignment='right')
-    plt.savefig('feature.svg')
+    plt.savefig('feature-2022-12-11-2.svg')
     plt.show()
 
 
