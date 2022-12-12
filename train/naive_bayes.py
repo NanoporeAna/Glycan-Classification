@@ -10,9 +10,13 @@ from sklearn import datasets, metrics
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 
-file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+# file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+file_name = ['../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/1-3SG-MPB---40000 events',
+                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/2-3SL-MPB---40000 events',
+                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/3-STetra2-MPB---40000 events',
+                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/4-LSTa-MPB---40000 events']
 mol_num = len(file_name)
 for i in range(mol_num):
     file_name[i] += 'By3on2000mol3.csv'
@@ -36,7 +40,7 @@ if __name__ == '__main__':
     epoch = 100
     print('prepare datasets...')
 
-    save_path = '3ML_result.xlsx'
+    save_path = '4ML_result2022-12-12.xlsx'
     if not os.path.exists(save_path):
         df = pd.DataFrame()  # 表示创建空的表
         df.to_excel(save_path)

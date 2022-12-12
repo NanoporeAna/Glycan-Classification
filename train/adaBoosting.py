@@ -45,7 +45,7 @@ if __name__ == '__main__':
     time_2 = time.time()
     model_path = None
     # 自己数据集加载
-    save_path = '4ML_result.xlsx'
+    save_path = '4ML_result2022-12-12.xlsx'
     if not os.path.exists(save_path):
         df = pd.DataFrame()  # 表示创建空的表
         df.to_excel(save_path)
@@ -83,14 +83,14 @@ if __name__ == '__main__':
 
             # 采用混淆矩阵（metrics）计算各种评价指标
             ps.append(metrics.precision_score(test_labels, test_predict, average='weighted'))
-            rs.append(metrics.recall_score(test_labels, test_predict,labels=[0,1,2,3], average='weighted'))
+            rs.append(metrics.recall_score(test_labels, test_predict, labels=[0,1,2,3], average='weighted'))
             fs.append(metrics.f1_score(test_labels, test_predict, average='weighted'))
             cs.append(np.mean(test_labels == test_predict))
 
             # 分类报告 看有几类分子
-            class_report = metrics.classification_report(test_labels, test_predict,
-                                                         target_names=["3SG", "3SL", "STetra2", "LSTa"])
-            print(class_report)
+            # class_report = metrics.classification_report(test_labels, test_predict,
+            #                                              target_names=["3SG", "3SL", "STetra2", "LSTa"])
+            # print(class_report)
             # 输出混淆矩阵
             # confusion_matrix = metrics.confusion_matrix(test_labels, test_predict)
             confusion_matrix += metrics.confusion_matrix(test_labels, test_predict)

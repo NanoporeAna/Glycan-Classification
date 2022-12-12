@@ -39,7 +39,7 @@ def load_random_forest_data(file_name):
 if __name__ == '__main__':
     epoch = 100
     print('prepare datasets...')
-    save_path = '4ML_result.xlsx'
+    save_path = '4ML_result2022-12-12.xlsx'
     if not os.path.exists(save_path):
         df = pd.DataFrame()  # 表示创建空的表
         df.to_excel(save_path)
