@@ -1,4 +1,5 @@
 import os
+import random
 import time
 import joblib
 import numpy as np
@@ -9,26 +10,31 @@ from sklearn import datasets, metrics
 from sklearn import svm
 from sklearn.model_selection import train_test_split
 
-# file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
-#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
-#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
-file_name = ['../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/1-3SG-MPB---40000 events',
-                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/2-3SL-MPB---40000 events',
-                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/3-STetra2-MPB---40000 events',
-                 '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/4-LSTa-MPB---40000 events']
+file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL - 30000 event/Cel-DPE-6SL-30000 events',
+             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL - 30000 event/Lac-DPE-6SL-30000 events',
+             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL - 30000 event/Mal-DPE-6SL-30000 events']
+# file_name = ['../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/1-3SG-MPB---40000 events',
+#                  '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/2-3SL-MPB---40000 events',
+#                  '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/3-STetra2-MPB---40000 events',
+#                  '../data/3SG-MPB---3SL-MPB---STetra2-MPB---LSTa-MPB1/4-LSTa-MPB---40000 events']
 mol_num = len(file_name)
 for i in range(mol_num):
-    file_name[i] += 'By3on2000mol3.csv'
+    file_name[i] += 'By21on2500mol3.csv'
 
-def load_svm_data(file_name):
+def load_svm_data(file_name, type):
     features = []
     labels = []
     for index, file in enumerate(file_name):
         raw_data = pd.read_csv(file, header=0)  # 读取csv数据，并将第一行视为表头，返回DataFrame类型
         length = raw_data.shape[0]
         data = raw_data.values
-        features.extend(data[::, 1::])
-        labels.extend([index]*length)
+        if type:
+            t = random.sample([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 10)
+            features.extend(data[t, 1::])
+            labels.extend([index] * 10)
+        else:
+            features.extend(data[::, 1::])
+            labels.extend([index] * length)
      # 选取20%数据作为测试集，剩余为训练集
     # stratify=labels 这个是分组的标志，用到自己数据集上即为四个分子的类别，保证每个分子取到的样本数差不多，分层抽样
     train_features, test_features, train_labels, test_labels = train_test_split(features, labels,
@@ -39,7 +45,7 @@ if __name__ == '__main__':
     epoch = 100
     print('prepare datasets...')
     # 自己数据集加载
-    save_path = '4ML_result2022-12-12.xlsx'
+    save_path = '3Molecure_result2022-12-12-5.xlsx'
     if not os.path.exists(save_path):
         df = pd.DataFrame()  # 表示创建空的表
         df.to_excel(save_path)
@@ -56,7 +62,7 @@ if __name__ == '__main__':
         for i in range(epoch):
         # if model_path is None:
             # 自己数据集加载
-            train_features, test_features, train_labels, test_labels = load_svm_data(file_name)
+            train_features, test_features, train_labels, test_labels = load_svm_data(file_name, type=True)
             print('Start training...')
             """
             C：SVC的惩罚参数，默认值是1.0；C越大，对误分类的惩罚增大，趋向于对训练集完全分对的情况，这样对训练集测试时准确率很高，但泛化能力弱。
@@ -69,7 +75,7 @@ if __name__ == '__main__':
             train_acc.append(train_score)
             print("训练集：", train_score)
 
-            joblib.dump(clf, "../models/svm_model%d.m" % i)
+            joblib.dump(clf, "../models/svm_model12-12-5.m")
             time_3 = time.time()
             print('training cost %f seconds' % (time_3 - time_2))
 
@@ -86,15 +92,15 @@ if __name__ == '__main__':
 
             # 采用混淆矩阵（metrics）计算各种评价指标
             ps.append(metrics.precision_score(test_labels, test_predict, average='weighted'))
-            rs.append(metrics.recall_score(test_labels, test_predict, labels=[0,1,2,3], average='weighted'))
+            rs.append(metrics.recall_score(test_labels, test_predict, labels=[0,1,2], average='weighted'))
             fs.append(metrics.f1_score(test_labels, test_predict, average='weighted'))
             cs.append(np.mean(test_labels == test_predict))
             # f, t, _ = roc_curve(test_labels, test_predict)
             # roc.append(auc(f, t))
             # 分类报告
-            class_report = metrics.classification_report(test_labels, test_predict,
-                                                         target_names=["3SG", "3SL", "STetra2", "LSTa"])
-            print(class_report)
+            # class_report = metrics.classification_report(test_labels, test_predict,
+            #                                              target_names=["3SG", "3SL", "STetra2", "LSTa"])
+            # print(class_report)
             """
             test_labels 为样本真实标签，test_predict 为样本预测标签；
             support：当前行的类别在测试数据中的样本总量，如上表就是，在class 0 类别在测试集中总数量为1；
