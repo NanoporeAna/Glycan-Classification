@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import numpy as np
 
@@ -44,20 +46,119 @@ def get_data():
     pass
 
 
-
-def get_feature(file_name, sample_len, num):
+def get_feature(path, sample_len, num, sample_type, interval=317, size=40):
     """
 
-    :param file_name:  需要处理的文件名列表
+    :param path:  需要处理的文件名路径
     :param sample_len: 短读数据长度
     :param num: 几等分
+    :param sample_type : 采样方法，1、base：连续采样 2、Windows：时间窗滑动采样 3、sample： 随机采样
+    :param interval： 间隔时长，默认时长为317个点
+    :param size: 总共随机采样几次，默认随机获取40个短读事件
     :return: 在当前目录生成特征文件
     """
+    # 列出指定目录下的文件夹路径
+    # 获取当前目录下的所有文件和子目录
+    items = os.listdir(path)
+
+    # 仅保留 CSV 文件
+    file_name = [os.path.join(path, item) for item in items if os.path.isfile(os.path.join(path, item))]
+
+    NNR_name = [item.strip('.csv') for item in items if os.path.isfile(os.path.join(path, item))]
+
     mol_num = len(file_name)
-    data = [pd.read_excel(i+'.xlsx') for i in file_name]
-    t = pd.read_excel('data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events.xlsx')
-    x = [i['value1'].values for i in data]
-    y = [i['value2'].values for i in data]
+    data = [pd.read_csv(i) for i in file_name]
+    # t = pd.read_excel('data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events.xlsx')
+    x = [i['BlockDepth'].values for i in data]
+    y = [i['ResTime'].values for i in data]
+    tmp_x = [m for n in x for m in n]
+    tmp_y = [m for n in y for m in n]
+    x_tmp = sorted(tmp_x)
+    y_tmp = sorted(tmp_y)
+    res_x, res_y = split_slice_n(x_tmp, y_tmp, num)
+    if sample_type == 'base':
+        save_path = os.path.join(path, 'featureBy' + str(num) + 'on' + str(sample_len) + 'base')
+        if os.path.exists(save_path):
+            pass
+        else:
+            os.mkdir(save_path)
+        for j in range(mol_num):
+            start = 0
+            temp_len = data[j].shape[0]
+            features = []
+            for i in range(temp_len//sample_len):
+                data_value = data[j][start:sample_len*(i+1)].values
+                feature = get_sample(data_value, res_x, res_y, num)
+                feature /= sample_len
+                start = sample_len*(i+1)
+                features.append(feature)
+            t = pd.DataFrame(features)
+            t.to_csv(os.path.join(save_path, NNR_name[j]+'-feature.csv'))
+
+    elif sample_type == 'windows':
+        save_path = os.path.join(path, 'featureBy' + str(num) + 'on' + str(sample_len) + 'windows')
+        if os.path.exists(save_path):
+            pass
+        else:
+            os.mkdir(save_path)
+        for j in range(mol_num):
+            start = 0
+            temp_len = data[j].shape[0]
+            features = []
+            all_len = temp_len-sample_len
+            for i in range(all_len//interval):
+                data_value = data[j][start:sample_len*(i+1)].values
+                feature = get_sample(data_value, res_x, res_y, num)
+                feature /= sample_len
+                start = i*interval
+                features.append(feature)
+            t = pd.DataFrame(features)
+            t.to_csv(os.path.join(save_path, NNR_name[j]+'-feature.csv'))
+    elif sample_type == 'random':
+        save_path = os.path.join(path, 'featureBy' + str(num) + 'on' + str(sample_len) + 'random')
+        if os.path.exists(save_path):
+            pass
+        else:
+            os.mkdir(save_path)
+        for index, file in enumerate(file_name):
+            data = pd.read_csv(file)
+            # 假设原始纳米孔信号是一个长度为N的数组 nanopore_signal
+            N = data.shape[0]
+            features = []
+            for i in range(size):
+                # 随机选择2000个索引
+                selected_indices = np.random.choice(N, size=2000, replace=False)
+                data_value = data.loc[selected_indices].values
+                feature = get_sample(data_value, res_x, res_y, num)
+                feature /= sample_len
+                features.append(feature)
+            t = pd.DataFrame(features)
+            t.to_csv(os.path.join(save_path, NNR_name[index]+'-feature.csv'))
+
+
+def get_feature_window(path, sample_len, num, interval):
+    """
+    获取特征根据时间窗
+    :param path:  需要处理的文件路径
+    :param sample_len: 短读数据长度
+    :param num: 几等分
+    :param interval： 间隔时长
+    :return: 在当前目录生成特征文件
+    """
+    # 列出指定目录下的文件夹路径
+    NNR_name = [f.strip('.csv') for r, _, fs in os.walk(path) for f in fs]
+    file_name = [os.path.join(path, f) for r, _, fs in os.walk(path) for f in fs]
+    mol_num = len(NNR_name)
+
+    save_path = os.path.join(path, 'featureBy' + str(num) + 'on' + str(sample_len))
+    if os.path.exists(save_path):
+        pass
+    else:
+        os.mkdir(save_path)
+    data = [pd.read_csv(i) for i in file_name]
+    # t = pd.read_excel('data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events.xlsx')
+    x = [i['BlockDepth'].values for i in data]
+    y = [i['ResTime'].values for i in data]
     tmp_x = [m for n in x for m in n]
     tmp_y = [m for n in y for m in n]
 
@@ -69,27 +170,21 @@ def get_feature(file_name, sample_len, num):
     # print(res_y)
 
     for j in range(mol_num):
-
         start = 0
         temp_len = data[j].shape[0]
         features = []
-        for i in range(temp_len//sample_len):
+        all_len = temp_len-sample_len
+        for i in range(all_len//interval):
             data_value = data[j][start:sample_len*(i+1)].values
             feature = get_sample(data_value, res_x, res_y, num)
             feature /= sample_len
-            start = sample_len*(i+1)
+            start = i*interval
             features.append(feature)
         t = pd.DataFrame(features)
-        t.to_csv(file_name[j]+'By'+str(num)+'on'+str(sample_len)+'mol3.csv')
-
+        t.to_csv(os.path.join(save_path, NNR_name[j]+'-feature.csv'))
 
 if __name__=='__main__':
-    file_name = [
-        'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
-        'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
-        'data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events'
-    ]
+    path = './data/T240R二糖-NNR-Windows'
     num = 3  # 等分个数
     sample_len = 2000
-
-    get_feature(file_name, sample_len, num)
+    get_feature(path=path, sample_len=sample_len, num=3, sample_type='windows', interval=317, size=40)
