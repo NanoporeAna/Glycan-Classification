@@ -9,12 +9,16 @@ from sklearn import datasets, metrics
 from sklearn import svm
 from sklearn.model_selection import train_test_split
 
-file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+# file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+
+path = '../data/T240R 二糖-NNR'
+    # 列出指定目录下的文件夹路径
+file_name = [os.path.join(path, f) for f in os.listdir(path) if 'By3on2000mol3.csv' in f]
 mol_num = len(file_name)
-for i in range(mol_num):
-    file_name[i] += 'By3on2000mol3.csv'
+# for i in range(mol_num):
+#     file_name[i] += 'By3on2000mol3.csv'
 
 def load_svm_data(file_name):
     features = []

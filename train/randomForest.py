@@ -9,12 +9,16 @@ from sklearn import metrics
 from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.model_selection import train_test_split
 
-file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+# file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+
+path = '../data/T240R 二糖-NNR'
+    # 列出指定目录下的文件夹路径
+file_name = [os.path.join(path, f) for f in os.listdir(path) if 'By3on2000mol3.csv' in f]
 mol_num = len(file_name)
-for i in range(mol_num):
-    file_name[i] += 'By3on2000mol3.csv'
+# for i in range(mol_num):
+#     file_name[i] += 'By3on2000mol3.csv'
 
 def load_random_forest_data(file_name):
 
@@ -53,9 +57,7 @@ if __name__ == '__main__':
             # 自己数据集加载
             train_features, test_features, train_labels, test_labels = load_random_forest_data(file_name)
             print('Start training...')
-
             # n_estimators表示要组合的弱分类器个数；
-
             clf = RandomForestClassifier(n_estimators=80)  # 容易区分则设置为25
             clf.fit(train_features, train_labels)  # training the svc train
             train_score = clf.score(train_features, train_labels)

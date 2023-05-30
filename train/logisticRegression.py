@@ -8,12 +8,16 @@ from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay
 from sklearn import datasets, metrics, linear_model
 from sklearn.model_selection import train_test_split
 
-file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
-             '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+# file_name = ['../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Cel-DPE-6SL-28930 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Lac-DPE-6SL-27696 events',
+#              '../data/Lac-DPE-6SL---Cel-DPE-6SL---Mal-DPE-6SL/Mal-DPE-6SL-31678 events']
+
+path = '../data/T240R 二糖-NNR'
+    # 列出指定目录下的文件夹路径
+file_name = [os.path.join(path, f) for f in os.listdir(path) if 'By3on2000mol3.csv' in f]
 mol_num = len(file_name)
-for i in range(mol_num):
-    file_name[i] += 'By3on2000mol3.csv'
+# for i in range(mol_num):
+#     file_name[i] += 'By3on2000mol3.csv'
 
 def load_logistic_data(file_name):
     features = []
@@ -107,24 +111,18 @@ if __name__ == '__main__':
             print('predicting cost %f seconds' % (time_4 - time_3))
 
             # 采用混淆矩阵（metrics）计算各种评价指标
-
             ps.append(metrics.precision_score(test_labels, test_predict, average='weighted'))
-            # rs.append(metrics.recall_score(test_labels, test_predict,labels=[0,1,2], average='weighted'))
+            rs.append(metrics.recall_score(test_labels, test_predict, labels=[0, 1, 2], average='weighted'))
             fs.append(metrics.f1_score(test_labels, test_predict, average='weighted'))
             cs.append(np.mean(test_labels == test_predict))
 
             # 分类报告 看有几类分子
             class_report = metrics.classification_report(test_labels, test_predict,
-                                                         target_names=["Cel-DPE6SL",
-                                                                       "Lac-DPE6SL", "Mal-DPE6SL"])
+                                                         target_names=["Cel-DPE6SL", "Lac-DPE6SL", "Mal-DPE6SL"])
             print(class_report)
             # 输出混淆矩阵
             # confusion_matrix = metrics.confusion_matrix(test_labels, test_predict)
-            cm = metrics.confusion_matrix(test_labels, test_predict)
-            confusion_matrix += cm
-            rs.append(calculate_recall(cm))
-            ps.append(calculate_prediction(cm))
-
+            confusion_matrix += metrics.confusion_matrix(test_labels, test_predict)
 
         print('--混淆矩阵--')
         print(confusion_matrix)
